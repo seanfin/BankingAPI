@@ -10,6 +10,6 @@ namespace Banking.Core.Interfaces
     {
         UserLogin Authenticate(string username, string password);
         IEnumerable<UserLogin> GetAll();
-        UserLogin GetById(int id);
+        UserLogin GetById(Guid id);
     }
 }
