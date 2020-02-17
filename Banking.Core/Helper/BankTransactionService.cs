@@ -9,7 +9,7 @@ using Banking.Core.Interfaces;
 
 namespace Banking.Core.Helper
 {
-    public class BankTransactionHelper: IBankTransactionHelper
+    public class BankTransactionService: IBankTransactionService
     {
         //TODO: move this to the appsettings.
         //Set the cache to expire in 30 minutes.

@@ -68,7 +68,7 @@ namespace BankingAPI
             });
 
             // Add our repository type
-            services.AddSingleton<IBankTransactionHelper, BankTransactionHelper>();
+            services.AddSingleton<IBankTransactionService, BankTransactionService>();
             services.AddSingleton<IUserService, UserService>();
 
         }

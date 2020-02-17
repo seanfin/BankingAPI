@@ -19,7 +19,7 @@ namespace Banking.Core.Test
         {
             int accountNumber = 123456;
 
-            BankTransactionHelper bankHelper = new BankTransactionHelper();
+            BankTransactionService bankHelper = new BankTransactionService();
             var transaction = bankHelper.GetAllBankingTransactions(accountNumber);
 
             Assert.IsNotNull(transaction);
@@ -62,7 +62,7 @@ namespace Banking.Core.Test
 
             
             //Let's get the bank helper.
-            BankTransactionHelper bankHelper = new BankTransactionHelper();
+            BankTransactionService bankHelper = new BankTransactionService();
             
             //Let's add the transaction helper.
             var Transaction1Posted = bankHelper.AddTransaction(transaction1);
@@ -140,7 +140,7 @@ namespace Banking.Core.Test
 
 
             //Let's get the bank helper.
-            BankTransactionHelper bankHelper = new BankTransactionHelper();
+            BankTransactionService bankHelper = new BankTransactionService();
 
             //Let's add the transaction helper.
             var Transaction1Posted = bankHelper.AddTransaction(transaction1);

@@ -124,7 +124,7 @@ namespace Banking.Core.Helper
             {
 
                 //Let's get all of the users.
-                var users = GetAll(false);
+                var users = GetAll();
 
 
                 user = users.SingleOrDefault(x => x.Username == username);
@@ -163,7 +163,7 @@ namespace Banking.Core.Helper
         /// This retrieves all of the users that are in our system.
         /// </summary>
         /// <returns>This returns an object with all of the users that are in the system.</returns>
-        public IEnumerable<UserLogin> GetAll(bool withoutPasswords = true)
+        public IEnumerable<UserLogin> GetAll()
         {
             //Create a list from the 
             List<UserLogin> logins = new List<UserLogin>();

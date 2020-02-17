@@ -6,7 +6,7 @@ using Banking.Core.Models;
 
 namespace Banking.Core.Interfaces
 {
-    public interface IBankTransactionHelper
+    public interface IBankTransactionService
     {
         BankTransaction AddTransaction(BankTransaction bankTransaction);
         public List<BankTransaction> GetAllBankingTransactions(int accountNumber);

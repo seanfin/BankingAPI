@@ -9,7 +9,8 @@ namespace Banking.Core.Interfaces
     public interface IUserService
     {
         UserLogin Authenticate(string username, string password);
-        IEnumerable<UserLogin> GetAll(bool withoutPasswords = true);
+        IEnumerable<UserLogin> GetAll();
         UserLogin GetById(Guid id);
+        UserLogin AddUser(UserLogin userLogin);
     }
 }
