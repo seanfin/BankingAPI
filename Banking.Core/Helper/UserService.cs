@@ -25,14 +25,6 @@ namespace Banking.Core.Helper
 
         protected MemoryCache cache = new MemoryCache("CachingProvider");
 
-
-
-
-
-        //TODO: move this to the appsettings.
-        //Set the cache to expire in 30 minutes.
-        private readonly int DEFAULT_CACHE_EXPIRATION_MINUTES = 30;
-
         private readonly AppSettings _appSettings;
 
         /// <summary>
@@ -41,6 +33,8 @@ namespace Banking.Core.Helper
         /// <param name="appSettings"></param>
         public UserService(IOptions<AppSettings> appSettings)
         {
+            _appSettings = appSettings.Value;
+
             // users hardcoded for simplicity, store in a db with hashed passwords in production applications
             UserLogin userLogin1 = new UserLogin { FirstName = "Gabe", LastName = "Smith", Username = "GSmight@Avengers.com", Password = "AvengersRule@", Role = Role.Admin };
             UserLogin userLogin2 = new UserLogin { FirstName = "Janet", LastName = "Markson", Username = "Janet@Pizza.com", Password = "PizzaTime1229", Role = Role.User };
@@ -50,7 +44,7 @@ namespace Banking.Core.Helper
             AddUser(userLogin2);
 
 
-            _appSettings = appSettings.Value;
+            
         }
 
         /// <summary>
@@ -86,7 +80,7 @@ namespace Banking.Core.Helper
                 //Create a cache policy so that it will expire eventually.
                 var policy = new CacheItemPolicy()
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(DEFAULT_CACHE_EXPIRATION_MINUTES)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(this._appSettings.CacheExpirationInMinutes)
                 };
 
                 //let's create a cache item. 

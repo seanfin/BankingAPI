@@ -1,11 +1,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Options;
+
 
 using Banking.Core;
 using Banking.Core.Models;
 using Banking.Core.Helper;
 using Banking.Core.Enums;
+using Banking.Core.Utils;
 
 
 
@@ -14,19 +17,25 @@ namespace Banking.Core.Test
     [TestClass]
     public class BankTransactionHelperTest
     {
+        private AppSettings _appSettings;
+
+        [TestInitialize()]
+        public void Startup()
+        {
+            _appSettings = AppSettingHelper.GetApplicationConfiguration();
+        }
+
+
         [TestMethod]
         public void BankTransaction_GetAllBankingTransactions()
         {
             int accountNumber = 123456;
 
-            BankTransactionService bankHelper = new BankTransactionService();
+            IOptions<AppSettings> settings = Options.Create(this._appSettings);
+            BankTransactionService bankHelper = new BankTransactionService(settings);
             var transaction = bankHelper.GetAllBankingTransactions(accountNumber);
 
             Assert.IsNotNull(transaction);
-
-
-
-
 
         }
 
@@ -60,9 +69,10 @@ namespace Banking.Core.Test
             transaction3.Description = "AMC Movie Theater";
             transaction3.TransactionType = BankingTransactionType.withdrawl;
 
-            
+
             //Let's get the bank helper.
-            BankTransactionService bankHelper = new BankTransactionService();
+            IOptions<AppSettings> settings = Options.Create(this._appSettings);
+            BankTransactionService bankHelper = new BankTransactionService(settings);
             
             //Let's add the transaction helper.
             var Transaction1Posted = bankHelper.AddTransaction(transaction1);
@@ -140,7 +150,8 @@ namespace Banking.Core.Test
 
 
             //Let's get the bank helper.
-            BankTransactionService bankHelper = new BankTransactionService();
+            IOptions<AppSettings> settings = Options.Create(this._appSettings);
+            BankTransactionService bankHelper = new BankTransactionService(settings);
 
             //Let's add the transaction helper.
             var Transaction1Posted = bankHelper.AddTransaction(transaction1);

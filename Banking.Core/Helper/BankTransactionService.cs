@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Caching;
+using Microsoft.Extensions.Options;
 
 using Banking.Core.Models;
 using Banking.Core.Enums;
 using Banking.Core.Interfaces;
+using Banking.Core.Utils;
 
 namespace Banking.Core.Helper
 {
@@ -13,14 +15,20 @@ namespace Banking.Core.Helper
     {
         //TODO: move this to the appsettings.
         //Set the cache to expire in 30 minutes.
-        private readonly int DEFAULT_CACHE_EXPIRATION_MINUTES = 30;
+       
 
+        private readonly AppSettings _appSettings;
 
-        /// <summary>
-        /// Adds a transaction to DB/Cache. 
-        /// </summary>
-        /// <param name="bankTransaction">The Model/Object representing the bank transaction that we wish to add/insert into the DB/cache.</param>
-        public BankTransaction AddTransaction (BankTransaction bankTransaction)
+        public BankTransactionService(IOptions<AppSettings> appSettings)
+        {
+            this._appSettings = appSettings.Value;
+        }
+
+            /// <summary>
+            /// Adds a transaction to DB/Cache. 
+            /// </summary>
+            /// <param name="bankTransaction">The Model/Object representing the bank transaction that we wish to add/insert into the DB/cache.</param>
+            public BankTransaction AddTransaction (BankTransaction bankTransaction)
         {
             //Check to see if the account number is populated if not we need to throw an exception. 
             if (bankTransaction.AccountNumber == -1)
@@ -62,7 +70,7 @@ namespace Banking.Core.Helper
                 //Create a cache policy so that it will expire eventually.
                 var policy = new CacheItemPolicy()
                 {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(DEFAULT_CACHE_EXPIRATION_MINUTES)
+                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(this._appSettings.CacheExpirationInMinutes)
                 };
 
                 //let's create a cache item. 
