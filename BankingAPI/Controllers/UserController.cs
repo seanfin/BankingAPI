@@ -33,7 +33,7 @@ namespace BankingAPI.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(user);
+            return Ok(user.WithoutPassword());
         }
 
         [Authorize(Roles = Role.Admin)]
@@ -41,7 +41,7 @@ namespace BankingAPI.Controllers
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
-            return Ok(users);
+            return Ok(users.WithoutPasswords());
         }
 
         [HttpGet("{id}")]
@@ -57,7 +57,7 @@ namespace BankingAPI.Controllers
             if (user == null)
                 return NotFound();
 
-            return Ok(user);
+            return Ok(user.WithoutPassword());
         }
     }
 }

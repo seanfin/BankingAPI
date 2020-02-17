@@ -8,6 +8,9 @@ namespace Banking.Core.Models
 {
 
     public class UserLogin
+      
+   
+
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
@@ -18,7 +21,15 @@ namespace Banking.Core.Models
         public string Token { get; set; }
         public List<int> UserBankAccounts { get; set; }
 
+        public UserLogin()
+        {
+            this.UserBankAccounts = new List<int>();
+
+
+        }
 
     }
+
+    
 
 }
