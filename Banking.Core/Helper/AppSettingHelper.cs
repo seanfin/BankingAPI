@@ -4,11 +4,7 @@ using System.Text;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
-
-
-using Banking.Core.Utils;
-
-namespace Banking.Core.Test
+namespace Banking.Core.Utils
 {
     public class AppSettingHelper
     {       
@@ -28,18 +24,26 @@ namespace Banking.Core.Test
 
 
         public static AppSettings GetApplicationConfiguration()
-        {
-           
+        {          
 
             var configuration = new AppSettings();
-
             var iConfig = GetIConfigurationRoot();
-            
             var section = iConfig.GetSection("AppSettings");
-
-
+                       
             ConfigurationBinder.Bind(section, configuration);
                        
+            return configuration;
+        }
+
+        public static ExternalAppSettings GetExternalApplicationConfiguration()
+        {
+
+            var configuration = new AppSettings();
+            var iConfig = GetIConfigurationRoot();
+            var section = iConfig.GetSection("ExternalAppSettings");
+
+            ConfigurationBinder.Bind(section, configuration);
+
             return configuration;
         }
 

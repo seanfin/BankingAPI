@@ -37,7 +37,7 @@ namespace BankingAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddLogging();
 
@@ -70,6 +70,7 @@ namespace BankingAPI
             // Add our repository type
             services.AddSingleton<IBankTransactionService, BankTransactionService>();
             services.AddSingleton<IUserService, UserService>();
+           
 
         }
 

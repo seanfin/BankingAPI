@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingAPI", "BankingAPI\BankingAPI.csproj", "{C191384C-B1F8-4F29-8F37-6A1257775050}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingAPI", "BankingAPI\BankingAPI.csproj", "{C191384C-B1F8-4F29-8F37-6A1257775050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankingConsole", "BankingConsole\BankingConsole.csproj", "{71B6273C-A105-4E9A-8B95-E8747D1666AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankingConsole", "BankingConsole\BankingConsole.csproj", "{71B6273C-A105-4E9A-8B95-E8747D1666AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Core", "Banking.Core\Banking.Core.csproj", "{B5CA4D84-3F08-4FB2-9F3B-D12AEE8629E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.Core", "Banking.Core\Banking.Core.csproj", "{B5CA4D84-3F08-4FB2-9F3B-D12AEE8629E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Core.Test", "BankingAPI.Test\Banking.Core.Test.csproj", "{BC58B384-6388-49A7-9CC2-0640A4ED43E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Banking.Core.Test", "BankingAPI.Test\Banking.Core.Test.csproj", "{BC58B384-6388-49A7-9CC2-0640A4ED43E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Web.UI", "Banking.Web.UI\Banking.Web.UI.csproj", "{EF79BA7A-01C1-4952-B9B7-9B766166C4DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BC58B384-6388-49A7-9CC2-0640A4ED43E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC58B384-6388-49A7-9CC2-0640A4ED43E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC58B384-6388-49A7-9CC2-0640A4ED43E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF79BA7A-01C1-4952-B9B7-9B766166C4DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF79BA7A-01C1-4952-B9B7-9B766166C4DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF79BA7A-01C1-4952-B9B7-9B766166C4DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF79BA7A-01C1-4952-B9B7-9B766166C4DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

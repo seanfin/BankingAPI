@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using System.IO;
+
 namespace BankingAPI
 {
     public class Program
@@ -14,6 +16,11 @@ namespace BankingAPI
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+
+            
+           
+
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

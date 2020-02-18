@@ -11,29 +11,43 @@ using Banking.Core.Utils;
 
 namespace Banking.Core.Helper
 {
-    public class BankTransactionService: IBankTransactionService
+    public class BankTransactionService : IBankTransactionService
     {
         //TODO: move this to the appsettings.
         //Set the cache to expire in 30 minutes.
-       
+
 
         private readonly AppSettings _appSettings;
 
         public BankTransactionService(IOptions<AppSettings> appSettings)
         {
             this._appSettings = appSettings.Value;
+
+            //Let's create some initial accounts to start off with for display purposes. 
+            int accountNumber1 = 99868786;
+            AddGhostTransactions(accountNumber1);
+
+            //Let's create some initial accounts to start off with for display purposes. 
+            int accountNumber2 = 584752341;
+            AddGhostTransactions(accountNumber2);
+            
+
+
+
+
+
         }
 
-            /// <summary>
-            /// Adds a transaction to DB/Cache. 
-            /// </summary>
-            /// <param name="bankTransaction">The Model/Object representing the bank transaction that we wish to add/insert into the DB/cache.</param>
-            public BankTransaction AddTransaction (BankTransaction bankTransaction)
+        /// <summary>
+        /// Adds a transaction to DB/Cache. 
+        /// </summary>
+        /// <param name="bankTransaction">The Model/Object representing the bank transaction that we wish to add/insert into the DB/cache.</param>
+        public BankTransaction AddTransaction(BankTransaction bankTransaction)
         {
             //Check to see if the account number is populated if not we need to throw an exception. 
             if (bankTransaction.AccountNumber == -1)
-            { 
-                throw new Exception("In order to add a Transaction the bankTransaction object needs to have an account number associated with it."); 
+            {
+                throw new Exception("In order to add a Transaction the bankTransaction object needs to have an account number associated with it.");
             }
             else if (bankTransaction.PostedAmount == 0)
             {
@@ -42,50 +56,44 @@ namespace Banking.Core.Helper
             }
 
 
-            try
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //Special note: I am unfamiliar with how the banking industry works, so they could very well be refunding on a withdrawl 
+            //here and we could not want to use Math.Abs. However, this would be where I would want to speak to the client and have 
+            //some more industry information. 
+
+
+            //Additionally let's just make sure that they are using absolute values when they are adding the amounts. 
+            bankTransaction.PostedAmount = Math.Abs(bankTransaction.PostedAmount);
+
+            //Let's get the transactions in the database.
+            List<BankTransaction> transactions = GetAllBankingTransactions(bankTransaction.AccountNumber);
+
+
+            //We add the guid to the transaction before we add it. 
+            bankTransaction.BankTransactionID = Guid.NewGuid();
+
+            //Let's add the transaction to the list. 
+            transactions.Add(bankTransaction);
+
+
+            //Get a reference to the default MemoryCache instance.
+            var cacheContainer = MemoryCache.Default;
+
+            //Create a cache policy so that it will expire eventually.
+            var policy = new CacheItemPolicy()
             {
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //Special note: I am unfamiliar with how the banking industry works, so they could very well be refunding on a withdrawl 
-                //here and we could not want to use Math.Abs. However, this would be where I would want to speak to the client and have 
-                //some more industry information. 
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(this._appSettings.CacheExpirationInMinutes)
+            };
+
+            //let's create a cache item. 
+            var itemToCache = new CacheItem(bankTransaction.AccountNumber.ToString(), transactions);
+
+            //Now lets set the cache container to have the new data. 
+            cacheContainer.Set(itemToCache, policy);
 
 
-                //Additionally let's just make sure that they are using absolute values when they are adding the amounts. 
-                bankTransaction.PostedAmount = Math.Abs(bankTransaction.PostedAmount);
-                               
-                //Let's get the transactions in the database.
-                List<BankTransaction> transactions = GetAllBankingTransactions(bankTransaction.AccountNumber);
 
-
-                //We add the guid to the transaction before we add it. 
-                bankTransaction.BankTransactionID = Guid.NewGuid();
-
-                //Let's add the transaction to the list. 
-                transactions.Add(bankTransaction);
-
-
-                //Get a reference to the default MemoryCache instance.
-                var cacheContainer = MemoryCache.Default;
-
-                //Create a cache policy so that it will expire eventually.
-                var policy = new CacheItemPolicy()
-                {
-                    AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(this._appSettings.CacheExpirationInMinutes)
-                };
-
-                //let's create a cache item. 
-                var itemToCache = new CacheItem(bankTransaction.AccountNumber.ToString(), transactions); 
-                
-                //Now lets set the cache container to have the new data. 
-                cacheContainer.Set(itemToCache, policy);
-
-
-            }
-            catch
-            ( Exception ex)
-            {
-                throw ex;
-            }
 
             return bankTransaction;
         }
@@ -94,10 +102,10 @@ namespace Banking.Core.Helper
         /// Get all BankingTransactions
         /// </summary>
         /// <param name="accountNumber">The bank number associated with the banking transactions that are being returned. </param>
-        public List<BankTransaction> GetAllBankingTransactions(int accountNumber )
+        public List<BankTransaction> GetAllBankingTransactions(int accountNumber)
         {
 
-            
+
 
             //Let's create an object for populating with the transactions. 
             List<BankTransaction> transactions = new List<BankTransaction>();
@@ -136,7 +144,7 @@ namespace Banking.Core.Helper
             }
 
 
-            return transactions; 
+            return transactions;
 
         }
 
@@ -176,7 +184,43 @@ namespace Banking.Core.Helper
             return accountBalance;
         }
 
-      
+        
+        private void AddGhostTransactions(int accountNumber)
+        {
+            //The transaction 1 we will be using. 
+            BankTransaction transaction1 = new BankTransaction();
+            transaction1.AccountNumber = accountNumber;
+            transaction1.PostedDate = DateTime.Now;
+            transaction1.PostedAmount = 3000;
+            transaction1.Description = "Initial Deposit";
+            transaction1.TransactionType = BankingTransactionType.deposit;
+
+            AddTransaction(transaction1);
+
+
+            //The transaction we will be using. 
+            BankTransaction transaction2 = new BankTransaction();
+            transaction2.AccountNumber = accountNumber;
+            transaction2.PostedDate = DateTime.Now;
+            transaction2.PostedAmount = 15.95m;
+            transaction2.Description = "Trader Joes";
+            transaction2.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction2);
+
+            //The transaction 3 we will be using. 
+            BankTransaction transaction3 = new BankTransaction();
+            transaction3.AccountNumber = accountNumber;
+            transaction3.PostedDate = DateTime.Now;
+            transaction3.PostedAmount = 30.99m;
+            transaction3.Description = "AMC Movie Theater";
+            transaction3.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction3);
+
+
+        }
+
 
 
 

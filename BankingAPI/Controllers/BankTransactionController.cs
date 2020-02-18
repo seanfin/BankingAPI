@@ -6,43 +6,107 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
+using Banking.Core.Interfaces;
+using Banking.Core.Models;
+
 namespace BankingAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class BankTransactionController : ControllerBase
     {
+        private IBankTransactionService _bankTransactionService;
+
+        public BankTransactionController(IBankTransactionService bankTransactionService)
+        {
+            _bankTransactionService = bankTransactionService;
+        }
+
+
+        /// <summary>
+        /// This retrieves all of the bank transactions for specific individual. 
+        /// </summary>
+        /// <param name="accountNumber">This is the account number that we are wishing to retrieve data for.</param>
+        /// <returns>An action result if things went OK with an array of banking transactions.</returns>
         // GET: api/BankTransaction
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("gettransactions")]
+        public IActionResult GetTransactions([FromBody]int accountNumber)
         {
-            return new string[] { "value1", "value2" };
+            //Get the transactions.
+            try
+            {
+                var transactions = this._bankTransactionService.GetAllBankingTransactions(accountNumber).ToArray();
+
+                return Ok(transactions);
+
+            }
+            catch (Exception ex)
+            {
+                //If there was an error send back the bad request.
+                return BadRequest(new { message = ex.Message.ToString() });
+            }
         }
 
-        // GET: api/BankTransaction/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //// GET: api/BankTransaction/5
+        //[HttpGet("{id}", Name = "Get")]
+        //public string Get(Guid id)
+        //{
+        //    //Get the transactions.
+        //    try
+        //    {
+        //        var transaction = this._bankTransactionService.
+        //    }
+        //    catch(Exception ex)
+        //    {
 
-        // POST: api/BankTransaction
+        //    }
+
+
+        //        return "value";
+        //}
+
+        // POST: BankTransaction
+        /// <summary>
+        /// This is the method for adding banktransactions to the system.
+        /// </summary>
+        /// <remarks>
+        /// This will be for both the withdrawls and the deposits.
+        /// </remarks>
+        /// <param name="value"></param>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody]BankTransaction bankTransaction)
         {
+           
+            //Add the transaction.
+            try
+            {
+                var transaction = this._bankTransactionService.AddTransaction(bankTransaction);
+
+                if (transaction.BankTransactionID == Guid.Empty)
+                {
+                    //throw an exception and catch at top. 
+                    throw new Exception("There was an error when attempting to add transaction the bank transaction has no BankTransactionID");
+                }
+                else
+                {
+                    //return that all is ok
+                    return Ok(transaction);
+                }
+                                
+            }
+            catch(Exception ex)
+            {
+                //If there was an error send back the bad request.
+                return BadRequest(new { message = ex.Message.ToString() });
+
+            }
+
         }
 
-        // PUT: api/BankTransaction/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
+
+       
     }
 }

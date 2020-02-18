@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Banking.Core.Utils
 {
-    public class AppSettings
+    public class AppSettings : ExternalAppSettings
     {
         /// <summary>
         /// This is the secret
@@ -15,5 +15,8 @@ namespace Banking.Core.Utils
         /// This is the time limit for the cache.
         /// </summary>
         public int CacheExpirationInMinutes { get; set; }
+
+        
+               
     }
 }

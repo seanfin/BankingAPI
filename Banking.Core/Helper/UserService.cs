@@ -124,7 +124,7 @@ namespace Banking.Core.Helper
                 user = users.SingleOrDefault(x => x.Username == username);
                 
                 //do the passwords match?
-                if(user.Password != password)
+                if(user == null || user.Password != password)
                 {
                     return null;
                 }
