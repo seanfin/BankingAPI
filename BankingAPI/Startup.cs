@@ -101,7 +101,7 @@ namespace BankingAPI
                 .AllowAnyHeader());
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

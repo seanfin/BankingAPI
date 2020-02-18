@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
-using Banking.Web.UI.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Banking.Web.UI.Data;
 
 
 
@@ -33,25 +33,25 @@ namespace Banking.Web.UI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
 
 
 
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            // Enable cookie authentication
-            services.AddAuthentication(sharedOptions =>
-            {
-                sharedOptions.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                sharedOptions.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                // sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            })
-            .AddCookie();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                    {
+                        options.AccessDeniedPath = new PathString("/Account/Access");
+                        options.LoginPath = new PathString("/Account/Login");
+                    });
+
+
 
 
 
@@ -59,7 +59,7 @@ namespace Banking.Web.UI
             services.AddHttpContextAccessor();
             services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
-           
+
 
         }
 
@@ -67,14 +67,22 @@ namespace Banking.Web.UI
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
+          
 
+
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax,
+            };
+
+            app.UseCookiePolicy();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                
             }
             else
             {
