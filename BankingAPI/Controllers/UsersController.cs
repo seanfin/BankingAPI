@@ -35,7 +35,7 @@ namespace BankingAPI.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            user = SecurityHelper.RemovePassword(user);
+            //user = SecurityHelper.RemovePassword(user);
 
 
             return Ok(user);
