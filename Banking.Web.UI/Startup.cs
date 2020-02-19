@@ -69,6 +69,12 @@ namespace Banking.Web.UI
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddHttpClient("BankTransactions", client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:50362/BankTransaction/");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)

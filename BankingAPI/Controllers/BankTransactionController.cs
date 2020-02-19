@@ -30,7 +30,7 @@ namespace BankingAPI.Controllers
         /// <param name="accountNumber">This is the account number that we are wishing to retrieve data for.</param>
         /// <returns>An action result if things went OK with an array of banking transactions.</returns>
         // GET: api/BankTransaction
-        [HttpGet("gettransactions")]
+        [HttpPost("gettransactions")]
         public IActionResult GetTransactions([FromBody]int accountNumber)
         {
             //Get the transactions.

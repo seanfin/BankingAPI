@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Banking.Core.Models.BankTransaction>
+
+@{
+    ViewData["Title"] = "BankTransactions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>BankTransactions</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.AccountNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostedAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostedAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionType)
+            </td>
+            <td>
+               
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
