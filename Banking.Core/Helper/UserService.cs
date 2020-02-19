@@ -48,8 +48,15 @@ namespace Banking.Core.Helper
 
 
             // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-            ProfileInformation profile1 = new ProfileInformation { FirstName = "Gabe", LastName = "Smith", Username = "GSmight@Avengers.com"};
+            ProfileInformation profile1 = new ProfileInformation { FirstName = "Gabe", LastName = "Smith", Username = "GSmight@Avengers.com" };
             ProfileInformation profile2 = new ProfileInformation { FirstName = "Janet", LastName = "Markson", Username = "Janet@Pizza.com"};
+
+
+            List<int> accountNumbers1 = new List<int>();
+            accountNumbers1.Add(99868786);
+            accountNumbers1.Add(584752341);
+
+            profile2.BankAccountNumbers = accountNumbers1;
 
             //Add the logins into the cache to start off. 
             AddProfileInformation(profile1);
@@ -309,6 +316,25 @@ namespace Banking.Core.Helper
             //return the user without the password.
             return user;
         }
+
+
+        /// <summary>
+        /// Retrieves an user by their ID.
+        /// </summary>
+        /// <param name="id">A unique identifier for the user.</param>
+        /// <returns>Returns the user login.</returns>
+        public ProfileInformation GetProfileInformationByEmail(string userName)
+        {
+            //Let's get all of the users.
+            var users = GetAllProfileInformation();
+
+            //Let's look for the ones with the correct IDs.
+            var profileInformation = users.FirstOrDefault(x => x.Username.Trim().ToLower() == userName.Trim().ToLower());
+
+            //return the user without the password.
+            return profileInformation;
+        }
+
 
     }
 }

@@ -18,5 +18,7 @@ namespace Banking.Core.Interfaces
         IEnumerable<ProfileInformation> GetAllProfileInformation();
 
         ProfileInformation GetByIDProfileInformation(Guid id);
+
+        ProfileInformation GetProfileInformationByEmail(string userName);
     }
 }

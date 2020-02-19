@@ -41,6 +41,16 @@ namespace BankingAPI.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
+        [HttpPost("getprofileinfobyusername")]
+        public IActionResult Authenticate([FromBody] string userName)
+        {
+            var profileInfo = _userService.GetProfileInformationByEmail(userName);
+
+            return Ok(profileInfo);
+        }
+
+
         [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public IActionResult GetAll()

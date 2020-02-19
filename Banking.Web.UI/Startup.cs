@@ -75,6 +75,12 @@ namespace Banking.Web.UI
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
+            services.AddHttpClient("Users", client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:50362/Users/");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -48,6 +48,32 @@ namespace BankingAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// This retrives the current balance. 
+        /// </summary>
+        /// <param name="accountNumber">This is the account number that we are wishing to retrieve data for.</param>
+        /// <returns>An action result if things went OK with an int of the balance of the data.</returns>
+        // GET: api/BankTransaction
+        [HttpPost("getbalance")]
+        public IActionResult GetBalance([FromBody]int accountNumber)
+        {
+            //Get the transactions.
+            try
+            {
+                var balance = this._bankTransactionService.GetBalance(accountNumber);
+
+                return Ok(balance);
+
+            }
+            catch (Exception ex)
+            {
+                //If there was an error send back the bad request.
+                return BadRequest(new { message = ex.Message.ToString() });
+            }
+        }
+
+
+
         //// GET: api/BankTransaction/5
         //[HttpGet("{id}", Name = "Get")]
         //public string Get(Guid id)

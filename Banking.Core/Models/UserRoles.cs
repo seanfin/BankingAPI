@@ -9,6 +9,7 @@ namespace Banking.Core.Models
         public const string Admin = "Admin";
         public const string User = "User";
         public const string Vendor = "Vendor";
+        public const string Teller = "Teller"; 
 
     }
 }

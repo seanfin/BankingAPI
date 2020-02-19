@@ -60,7 +60,7 @@ namespace Banking.Core.Test
             List<int> accountNumbers1 = new List<int>();
             accountNumbers1.Add(accountNumber1);
 
-            userLogin1.BankAccountNumbers = accountNumbers1.ToArray();
+            userLogin1.BankAccountNumbers = accountNumbers1;
 
 
             //The account number we will be using. 
