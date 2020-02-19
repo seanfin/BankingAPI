@@ -3,10 +3,13 @@ using System;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using Banking.Core;
+using System.Collections.Generic;
+
 using Banking.Core.Models;
 using Banking.Core.Helper;
 using Banking.Core.Enums;
 using Banking.Core.Utils;
+
 
 
 namespace Banking.Core.Test
@@ -34,7 +37,7 @@ namespace Banking.Core.Test
             UserService userService = new UserService(settings);
             
             //Get all of the Users.
-            var allUsers = userService.GetAll();
+            var allUsers = userService.GetAllAuthenticationModels();
 
             //Check to see that the default users are there.
             Assert.IsTrue(allUsers.ToArray().Length > 0);
@@ -49,24 +52,30 @@ namespace Banking.Core.Test
             //The account number we will be using. 
             int accountNumber1 = 123456;
 
-            UserLogin userLogin1 = new UserLogin();
+            ProfileInformation userLogin1 = new ProfileInformation();
             userLogin1.FirstName = "Peter";
             userLogin1.LastName = "Parker";
             userLogin1.Username = "SpiderMan@Avengers.com";
-            userLogin1.Password = "SpideyRules@";
-            userLogin1.UserBankAccounts.Add(accountNumber1);
-            userLogin1.Role = Role.User;
+
+            List<int> accountNumbers1 = new List<int>();
+            accountNumbers1.Add(accountNumber1);
+
+            userLogin1.BankAccountNumbers = accountNumbers1.ToArray();
+
 
             //The account number we will be using. 
             int accountNumber2 = 102356;
 
-            UserLogin userLogin2 = new UserLogin();
+            ProfileInformation userLogin2 = new ProfileInformation();
             userLogin2.FirstName = "Bruce";
             userLogin2.LastName = "Wayne";
             userLogin2.Username = "Batman@DC.com";
-            userLogin2.Password = "CatwomanLove@";
-            userLogin2.UserBankAccounts.Add(accountNumber2);
-            userLogin2.Role = Role.User;
+            
+            List<int> accountNumbers2 = new List<int>();
+            accountNumbers2.Add(accountNumber2);
+            
+            userLogin2.BankAccountNumbers = accountNumbers2.ToArray();
+            
 
 
             //Create the options and the User Service
@@ -74,16 +83,16 @@ namespace Banking.Core.Test
             UserService userService = new UserService(settings);
 
             //Let's add the first user.
-            var user1AfterAdded = userService.AddUser(userLogin1);
+            var user1AfterAdded = userService.AddProfileInformation(userLogin1);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetById(user1AfterAdded.Id));
+            Assert.IsNotNull(userService.GetByIDProfileInformation(user1AfterAdded.Id));
 
             //Let's add the second user.
-            var user2AfterAdded = userService.AddUser(userLogin2);
+            var user2AfterAdded = userService.AddProfileInformation(userLogin2);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetById(user2AfterAdded.Id));
+            Assert.IsNotNull(userService.GetByIDProfileInformation(user2AfterAdded.Id));
             
         }
 
@@ -94,24 +103,27 @@ namespace Banking.Core.Test
             //The account number we will be using. 
             int accountNumber1 = 889786;
 
-            UserLogin userLogin1 = new UserLogin();
+            ProfileInformation userLogin1 = new ProfileInformation();
             userLogin1.FirstName = "Charles";
             userLogin1.LastName = "Xavier";
             userLogin1.Username = "ProfessorX@XMen.com";
-            userLogin1.Password = "JeanGrey123";
-            userLogin1.UserBankAccounts.Add(accountNumber1);
-            userLogin1.Role = Role.User;
 
-            
+            List<int> bankAccountNumber1 = new List<int>();
+            bankAccountNumber1.Add(accountNumber1);
+
+            userLogin1.BankAccountNumbers = bankAccountNumber1.ToArray();
+
+
+
             //Create the options and the User Service
             IOptions<AppSettings> settings = Options.Create(this._appSettings);
             UserService userService = new UserService(settings);
 
             //Let's add the first user.
-            var user1AfterAdded = userService.AddUser(userLogin1);
+            var user1AfterAdded = userService.AddProfileInformation(userLogin1);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetById(user1AfterAdded.Id));
+            Assert.IsNotNull(userService.GetByIDProfileInformation(user1AfterAdded.Id));
             
         }
 
@@ -123,52 +135,48 @@ namespace Banking.Core.Test
             int accountNumber1 = 101010;
             string username1Password = "XmenSuck@Badguys.com";
 
-            UserLogin userLogin1 = new UserLogin();
-            userLogin1.FirstName = "Erik";
-            userLogin1.LastName = "Lehnsherr";
-            userLogin1.Username = "Magento@Avengers.com";
-            userLogin1.Password = username1Password;
-            userLogin1.UserBankAccounts.Add(accountNumber1);
-            userLogin1.Role = Role.User;
+            AuthenticateModel authenticationModel1 = new AuthenticateModel();
+            authenticationModel1.Username = "Magento@Avengers.com";
+            authenticationModel1.Password = username1Password;
+            
+            authenticationModel1.Role = Role.User;
 
             //The account number we will be using. 
-            int accountNumber2 = 9876588;
+
             string username2Password = "ShapshiftingRocks@";
 
-            UserLogin userLogin2 = new UserLogin();
-            userLogin2.FirstName = "Raven";
-            userLogin2.LastName = "Darkholme";
-            userLogin2.Username = "Mystique@Badguys.com";
-            userLogin2.Password = username2Password;
-            userLogin2.UserBankAccounts.Add(accountNumber2);
-            userLogin2.Role = Role.User;
-
+            AuthenticateModel authenticationModel2 = new AuthenticateModel();
+            
+            authenticationModel2.Username = "Mystique@Badguys.com";
+            authenticationModel2.Password = username2Password;
+            authenticationModel2.Role = Role.User;
+            
 
             //Create the options and the User Service
             IOptions<AppSettings> settings = Options.Create(this._appSettings);
             UserService userService = new UserService(settings);
 
             //Let's add the first user.
-            var user1AfterAdded = userService.AddUser(userLogin1);
+            var user1AfterAdded = userService.AddAuthenticationModel(authenticationModel1);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetById(user1AfterAdded.Id));
+            Assert.IsNotNull(userService.GetByIdAuthenticationModel(user1AfterAdded.Id));
 
             //Let's add the second user.
-            var user2AfterAdded = userService.AddUser(userLogin2);
+            var user2AfterAdded = userService.AddAuthenticationModel(authenticationModel2);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetById(user2AfterAdded.Id));
+            Assert.IsNotNull(userService.GetByIdAuthenticationModel(user2AfterAdded.Id));
 
 
             //Let's see that the users are getting authenticated. 
-            var userLogin1AfterAuthenication = userService.Authenticate(userLogin1.Username, username1Password);
+            var userLogin1AfterAuthenication = userService.Authenticate(authenticationModel1);
 
             //Let's check the token
             Assert.IsNotNull(userLogin1AfterAuthenication.Token);
 
             //Let's see that the users are getting authenticated. 
-            var userLogin2AfterAuthenication = userService.Authenticate(userLogin2.Username, username2Password);
+            var userLogin2AfterAuthenication = userService.Authenticate(authenticationModel2);
 
             //Let's check the token
             Assert.IsNotNull(userLogin2AfterAuthenication.Token);

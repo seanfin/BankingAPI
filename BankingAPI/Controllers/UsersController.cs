@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 using Banking.Core.Interfaces;
 using Banking.Core.Models;
 using Banking.Core.Utils;
 using Banking.Core.Helper;
 using Banking.Core.Enums;
+
 
 using System;
 
@@ -26,22 +28,32 @@ namespace BankingAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]AuthenticateModel model)
+        public IActionResult Authenticate([FromBody]AuthenticateModel authenticationModel)
         {
-            var user = _userService.Authenticate(model.Username, model.Password);
+            var user = _userService.Authenticate(authenticationModel);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(user.WithoutPassword());
+            user = SecurityHelper.RemovePassword(user);
+
+
+            return Ok(user);
         }
 
         [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _userService.GetAll();
-            return Ok(users.WithoutPasswords());
+            var users = _userService.GetAllAuthenticationModels();
+
+            List<AuthenticateModel> cleanUsers = new List<AuthenticateModel>();
+            cleanUsers.ForEach(model => SecurityHelper.RemovePassword(model));
+
+            return Ok(cleanUsers);
+
+            
+
         }
 
         [HttpGet("{id}")]
@@ -52,12 +64,14 @@ namespace BankingAPI.Controllers
             if (!User.IsInRole(Role.Admin))
                 return Forbid();
 
-            var user = _userService.GetById(id);
+            var user = _userService.GetByIdAuthenticationModel(id);
 
             if (user == null)
                 return NotFound();
 
-            return Ok(user.WithoutPassword());
+            user = SecurityHelper.RemovePassword(user);
+
+            return Ok(user);
         }
     }
 }

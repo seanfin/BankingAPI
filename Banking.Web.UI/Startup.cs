@@ -14,8 +14,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Banking.Web.UI.Data;
+using Microsoft.Extensions.Caching.Memory;
 
+
+using Banking.Web.UI.Data;
+using Banking.Web.UI.Models;
 
 
 namespace Banking.Web.UI
@@ -27,17 +30,40 @@ namespace Banking.Web.UI
             Configuration = configuration;
         }
 
+
+        
+
+        
+
+
         public IConfiguration Configuration { get; }
+
+
+
+
+
+        //// Set cache options.
+        //MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+        //    // Keep in cache for this time, reset time if accessed.
+        //    .SetSlidingExpiration(TimeSpan.FromSeconds(3));
+
+        //IMemoryCache memoryCache = new MemoryCache();
+
+
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-               options.UseSqlServer(
-                   Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddMemoryCache();
+            MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseMemoryCache(cache) ; });
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddSignInManager<BankSignInManager<IdentityUser>>()
+                .AddUserManager<BankUserManager<IdentityUser>>();
 
 
             services.AddControllersWithViews();
@@ -45,10 +71,11 @@ namespace Banking.Web.UI
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                     {
-                        options.AccessDeniedPath = new PathString("/Account/Access");
-                        options.LoginPath = new PathString("/Account/Login");
+                        options.AccessDeniedPath = new PathString("/Identity/Account/Access");
+                        options.LoginPath = new PathString("/Identity/Account/Login");
                     });
 
 
@@ -69,7 +96,8 @@ namespace Banking.Web.UI
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-          
+
+           
 
 
             var cookiePolicyOptions = new CookiePolicyOptions

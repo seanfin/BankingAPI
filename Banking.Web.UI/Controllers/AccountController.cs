@@ -64,10 +64,10 @@ namespace Banking.Web.UI.Controllers
                 }
 
 
-                var userLogin = await result.Content.ReadAsAsync<UserLogin>();
+                var userLogin = await result.Content.ReadAsAsync<AuthenticateModel>();
 
                 List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name, userLogin.FirstName));
+                claims.Add(new Claim(ClaimTypes.Email, userLogin.Username));
                 claims.Add(new Claim(ClaimTypes.Sid, userLogin.Id.ToString()));
 
 
@@ -92,8 +92,11 @@ namespace Banking.Web.UI.Controllers
                 var principal = new ClaimsPrincipal(userIdentity);
                 //await HttpContext.SignOutAsync();
                 //var appUser = await this._signInManager.UserManager.GetUserAsync(principal);
-                await HttpContext.SignInAsync(scheme: CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal: principal);
+
+
+
+                //await HttpContext.SignInAsync(scheme: CookieAuthenticationDefaults.AuthenticationScheme,
+                //    principal: principal);
 
                
                
@@ -115,7 +118,33 @@ namespace Banking.Web.UI.Controllers
 
         }
 
-        
+        public ActionResult Validate()
+        {
+
+            string d = "w";
+
+            //var _admin = db.Admins.Where(s => s.Email == admin.Email);
+            //if (_admin.Any())
+            //{
+            //    if (_admin.Where(s => s.Password == admin.Password).Any())
+            //    {
+
+            //        return Json(new { status = true, message = "Login Successfull!" });
+            //    }
+            //    else
+            //    {
+            //        return Json(new { status = false, message = "Invalid Password!" });
+            //    }
+            //}
+            //else
+            //{
+            //    return Json(new { status = false, message = "Invalid Email!" });
+            //}
+
+            return View();
+
+        }
+
 
 
 

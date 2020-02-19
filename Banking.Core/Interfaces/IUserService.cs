@@ -8,9 +8,15 @@ namespace Banking.Core.Interfaces
 {
     public interface IUserService
     {
-        UserLogin Authenticate(string username, string password);
-        IEnumerable<UserLogin> GetAll();
-        UserLogin GetById(Guid id);
-        UserLogin AddUser(UserLogin userLogin);
+        AuthenticateModel Authenticate(AuthenticateModel authenticateModel);
+        AuthenticateModel GetByIdAuthenticationModel(Guid id);
+
+        ProfileInformation AddProfileInformation(ProfileInformation profileInformation);
+        AuthenticateModel AddAuthenticationModel(AuthenticateModel authenticationModel);
+
+        IEnumerable<AuthenticateModel> GetAllAuthenticationModels();
+        IEnumerable<ProfileInformation> GetAllProfileInformation();
+
+        ProfileInformation GetByIDProfileInformation(Guid id);
     }
 }
