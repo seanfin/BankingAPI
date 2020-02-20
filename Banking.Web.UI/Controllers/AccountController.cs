@@ -59,7 +59,8 @@ namespace Banking.Web.UI.Controllers
                 client.BaseAddress = new Uri(this._appSettings.WebApiURLUser);
 
                 //Putting our username and password in a model because I want them going over in the body. 
-               
+
+                authenticateModel.Role = Role.User;
 
                 //Put them over in a post because I feel it works better than a get method. 
                 var responseTask = client.PostAsJsonAsync("createauthenicationaccount", authenticateModel);
@@ -158,39 +159,12 @@ namespace Banking.Web.UI.Controllers
 
         }
 
-        public ActionResult Validate()
-        {
-
-            string d = "w";
-
-            //var _admin = db.Admins.Where(s => s.Email == admin.Email);
-            //if (_admin.Any())
-            //{
-            //    if (_admin.Where(s => s.Password == admin.Password).Any())
-            //    {
-
-            //        return Json(new { status = true, message = "Login Successfull!" });
-            //    }
-            //    else
-            //    {
-            //        return Json(new { status = false, message = "Invalid Password!" });
-            //    }
-            //}
-            //else
-            //{
-            //    return Json(new { status = false, message = "Invalid Email!" });
-            //}
-
-            return View();
-
-        }
-
-
-
+      
+                
 
         public async Task<IActionResult> Logout()
         {
-            //await HttpContext.SignOutAsync();
+           
 
             return RedirectToAction(nameof(Login));
         }
