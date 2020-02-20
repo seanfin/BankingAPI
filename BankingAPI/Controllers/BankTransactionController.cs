@@ -28,11 +28,10 @@ namespace BankingAPI.Controllers
 
 
         /// <summary>
-        /// This retrieves all of the bank transactions for specific individual. 
+        /// This retrieves all of the bank transactions for specific account. 
         /// </summary>
         /// <param name="accountNumber">This is the account number that we are wishing to retrieve data for.</param>
         /// <returns>An action result if things went OK with an array of banking transactions.</returns>
-        // GET: api/BankTransaction
         [HttpPost("gettransactions")]
         public IActionResult GetTransactions([FromBody]int accountNumber)
         {
@@ -56,8 +55,6 @@ namespace BankingAPI.Controllers
         /// </summary>
         /// <param name="accountNumber">This is the account number that we are wishing to retrieve data for.</param>
         /// <returns>An action result if things went OK with an int of the balance of the data.</returns>
-        // GET: api/BankTransaction
-
         [HttpPost("getbalance")]
         public IActionResult GetBalance([FromBody]int accountNumber)
         {
@@ -77,33 +74,15 @@ namespace BankingAPI.Controllers
         }
 
 
+        
 
-        //// GET: api/BankTransaction/5
-        //[HttpGet("{id}", Name = "Get")]
-        //public string Get(Guid id)
-        //{
-        //    //Get the transactions.
-        //    try
-        //    {
-        //        var transaction = this._bankTransactionService.
-        //    }
-        //    catch(Exception ex)
-        //    {
-
-        //    }
-
-
-        //        return "value";
-        //}
-
-        // POST: BankTransaction
+        
         /// <summary>
         /// This is the method for adding banktransactions to the system.
         /// </summary>
         /// <remarks>
         /// This will be for both the withdrawls and the deposits.
         /// </remarks>
-        /// <param name="value"></param>
         [HttpPost("posttransaction")]
         public IActionResult Post([FromBody]BankTransaction bankTransaction)
         {
@@ -137,34 +116,7 @@ namespace BankingAPI.Controllers
         }
 
 
-        // POST: BankTransaction
-        /// <summary>
-        /// This is the method for adding banktransactions to the system.
-        /// </summary>
-        /// <remarks>
-        /// This will be for both the withdrawls and the deposits.
-        /// </remarks>
-        /// <param name="value"></param>
-        [HttpGet("Hello")]
-        public IActionResult Get()
-        {
-
-            //Add the transaction.
-            try
-            {
-
-
-                return Ok("Hello");
-
-            }
-            catch (Exception ex)
-            {
-                //If there was an error send back the bad request.
-                return BadRequest(new { message = ex.Message.ToString() });
-
-            }
-
-        }
+       
 
 
 

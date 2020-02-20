@@ -8,12 +8,12 @@
 <h1>BankTransactions</h1>
 
 
-    @if (User.IsInRole("Telller") || User.IsInRole("Admin"))
-    {
-        <p>
-        <a asp-action="CreateTransaction" >Post New Banking Transactions</a>
-            </p>
-    }
+@if (User.IsInRole("Telller") || User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="CreateTransaction">Post New Banking Transactions</a>
+    </p>
+}
 
         </p>
 <h3>Your current balance is = @ViewBag.AccountBalance</h3>
@@ -21,8 +21,8 @@
 <table class="table">
     <thead>
         <tr>
-            
-            
+
+
             <th>
                 @Html.DisplayNameFor(model => model.PostedDate)
             </th>
@@ -39,24 +39,29 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-           
-          
-            <td>
-                @Html.DisplayFor(modelItem => item.PostedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostedAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransactionType)
-            </td>
-           
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostedAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransactionType)
+                </td>
+
+            </tr>
+        }
     </tbody>
 </table>
+
+<div class="form-group">
+    @ViewBag.UserMessages
+</div>

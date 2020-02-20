@@ -25,11 +25,11 @@ namespace Banking.Core.Helper
 
             //Let's create some initial accounts to start off with for display purposes. 
             int accountNumber1 = 99868786;
-            AddGhostTransactions(accountNumber1);
+            AddGhostTransactions1(accountNumber1);
 
             //Let's create some initial accounts to start off with for display purposes. 
             int accountNumber2 = 584752341;
-            AddGhostTransactions(accountNumber2);
+            AddGhostTransactions2(accountNumber2);
             
 
 
@@ -185,7 +185,7 @@ namespace Banking.Core.Helper
         }
 
         
-        private void AddGhostTransactions(int accountNumber)
+        private void AddGhostTransactions1(int accountNumber)
         {
             //The transaction 1 we will be using. 
             BankTransaction transaction1 = new BankTransaction();
@@ -219,10 +219,110 @@ namespace Banking.Core.Helper
             AddTransaction(transaction3);
 
 
+            //The transaction 4 we will be using. 
+            BankTransaction transaction4 = new BankTransaction();
+            transaction4.AccountNumber = accountNumber;
+            transaction4.PostedDate = DateTime.Now;
+            transaction4.PostedAmount = 22.98m;
+            transaction4.Description = "Fred Meyer";
+            transaction4.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction4);
+
+
+            //The transaction 5 we will be using. 
+            BankTransaction transaction5 = new BankTransaction();
+            transaction5.AccountNumber = accountNumber;
+            transaction5.PostedDate = DateTime.Now;
+            transaction5.PostedAmount = 16.95m;
+            transaction5.Description = "NetFlix";
+            transaction5.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction5);
+
+            //The transaction 6 we will be using. 
+            BankTransaction transaction6 = new BankTransaction();
+            transaction6.AccountNumber = accountNumber;
+            transaction6.PostedDate = DateTime.Now;
+            transaction6.PostedAmount = 30.00m;
+            transaction6.Description = "Starbucks Card Reload";
+            transaction6.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction6);
+
+
         }
 
 
-       
+        private void AddGhostTransactions2(int accountNumber)
+        {
+            //The transaction 1 we will be using. 
+            BankTransaction transaction1 = new BankTransaction();
+            transaction1.AccountNumber = accountNumber;
+            transaction1.PostedDate = DateTime.Now;
+            transaction1.PostedAmount = 3000;
+            transaction1.Description = "Initial Deposit";
+            transaction1.TransactionType = BankingTransactionType.deposit;
+
+            AddTransaction(transaction1);
+
+
+            //The transaction we will be using. 
+            BankTransaction transaction2 = new BankTransaction();
+            transaction2.AccountNumber = accountNumber;
+            transaction2.PostedDate = DateTime.Now;
+            transaction2.PostedAmount = 15.95m;
+            transaction2.Description = "Trader Joes";
+            transaction2.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction2);
+
+            //The transaction 3 we will be using. 
+            BankTransaction transaction3 = new BankTransaction();
+            transaction3.AccountNumber = accountNumber;
+            transaction3.PostedDate = DateTime.Now;
+            transaction3.PostedAmount = 30.99m;
+            transaction3.Description = "AMC Movie Theater";
+            transaction3.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction3);
+
+            //The transaction 4 we will be using. 
+            BankTransaction transaction4 = new BankTransaction();
+            transaction4.AccountNumber = accountNumber;
+            transaction4.PostedDate = DateTime.Now;
+            transaction4.PostedAmount = 78.95m;
+            transaction4.Description = "Fred Meyer";
+            transaction4.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction4);
+
+
+            //The transaction 5 we will be using. 
+            BankTransaction transaction5 = new BankTransaction();
+            transaction5.AccountNumber = accountNumber;
+            transaction5.PostedDate = DateTime.Now;
+            transaction5.PostedAmount = 100.00m;
+            transaction5.Description = "Amazon";
+            transaction5.TransactionType = BankingTransactionType.withdrawl;
+
+            AddTransaction(transaction5);
+
+            //The transaction 6 we will be using. 
+            BankTransaction transaction6 = new BankTransaction();
+            transaction6.AccountNumber = accountNumber;
+            transaction6.PostedDate = DateTime.Now;
+            transaction6.PostedAmount = 2000.00m;
+            transaction6.Description = "Ach Paycheck";
+            transaction6.TransactionType = BankingTransactionType.deposit;
+
+            AddTransaction(transaction6);
+
+
+        }
+
+
+
 
 
 

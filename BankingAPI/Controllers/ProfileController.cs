@@ -27,8 +27,13 @@ namespace BankingAPI.Controllers
 
 
      
+        /// <summary>
+        /// Retrieves the user profile by the username.
+        /// </summary>
+        /// <param name="userName">the username.</param>
+        /// <returns>The user profile embeded in an action.</returns>
         [HttpPost("getprofileinfobyusername")]
-        public IActionResult Authenticate([FromBody] string userName)
+        public IActionResult GetUserGrofile([FromBody] string userName)
         {
             var profileInfo = this._profileService.GetProfileInformationByEmail(userName);
 

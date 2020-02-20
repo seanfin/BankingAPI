@@ -30,6 +30,8 @@ namespace Banking.Core.Helper
 
         public ProfileService(IOptions<AppSettings> appSettings) 
         {
+            this._appSettings = appSettings.Value;
+
             // users hardcoded for simplicity, store in a db with hashed passwords in production applications
             ProfileInformation profile1 = new ProfileInformation { FirstName = "Gabe", LastName = "Smith", Username = "GSmight@Avengers.com" };
             ProfileInformation profile2 = new ProfileInformation { FirstName = "Janet", LastName = "Markson", Username = "Janet@Pizza.com" };

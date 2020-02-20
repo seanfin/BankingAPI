@@ -27,9 +27,18 @@ namespace Banking.Web.UI.Controllers
 
         public async Task<IActionResult> SelectBankAccount()
         {
-            var model = await GetProfileInformation();
-            
-            return View(model);
+            ProfileInformation profile = null;
+
+            try
+            {
+                profile = await GetProfileInformation();
+            }
+            catch(Exception ex )
+            {
+                string userMessage = ex.Message;
+                ViewBag.UserMessage = userMessage;
+            }
+            return View(profile);
         }
 
 
@@ -37,16 +46,22 @@ namespace Banking.Web.UI.Controllers
         [HttpGet]
         public IActionResult CreateTransaction()
         {
-            //Get the account number that should have been passed along. 
-            int accountNumber = Convert.ToInt32(TempData["accountNumber"]);
-
             BankTransaction bankTransaction = new BankTransaction();
-            bankTransaction.AccountNumber = accountNumber;
-            bankTransaction.PostedDate = DateTime.Now;
+
+            try
+            {
+                
+                //Get the account number that should have been passed along. 
+                int accountNumber = Convert.ToInt32(TempData["accountNumber"]);
+                bankTransaction.AccountNumber = accountNumber;
+                bankTransaction.PostedDate = DateTime.Now;
+            }
+            catch(Exception ex )
+            {
+                string userMessage = ex.Message;
+                ViewBag.UserMessage = userMessage;
+            }
             
-
-
-
             return View(bankTransaction);
 
         }
@@ -55,12 +70,25 @@ namespace Banking.Web.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTransaction(BankTransaction bankTransaction)
         {
+            BankTransaction postedTrans = new BankTransaction();
 
-            var trans = await PostBankTransaction(bankTransaction);
+            try
+            {
+                postedTrans = await PostBankTransaction(bankTransaction);
+                TempData["accountNumber"] = bankTransaction.AccountNumber;
+                return RedirectToAction("BankTransactions", "Banking");
 
-            TempData["accountNumber"] = bankTransaction.AccountNumber;
-            return RedirectToAction("BankTransactions", "Banking");
-                        
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                ViewBag.UserMessage = message;
+            }
+
+
+            return View(postedTrans);
+
+
         }
 
 

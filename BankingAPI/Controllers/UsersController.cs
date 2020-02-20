@@ -26,6 +26,11 @@ namespace BankingAPI.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Authentications the user and provides a token.
+        /// </summary>
+        /// <param name="authenticationModel"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel authenticationModel)
@@ -44,7 +49,10 @@ namespace BankingAPI.Controllers
 
        
 
-
+        /// <summary>
+        /// Retrieves all of the users. 
+        /// </summary>
+        /// <returns>Returns a  list of all of the users</returns>
         [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public IActionResult GetAll()
@@ -60,6 +68,11 @@ namespace BankingAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Create a authentication record essentially registering a user. 
+        /// </summary>
+        /// <param name="authenticateModel">The username and password.</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("createauthenicationaccount")]
         public IActionResult CreateAcount(AuthenticateModel authenticateModel)
@@ -74,7 +87,11 @@ namespace BankingAPI.Controllers
 
         }
 
-
+        /// <summary>
+        /// Retrieves autentication model by ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)
         {
