@@ -30,7 +30,14 @@ namespace Banking.Core.Helper
             //Let's create some initial accounts to start off with for display purposes. 
             int accountNumber2 = 584752341;
             AddGhostTransactions2(accountNumber2);
-            
+
+            //Let's create some initial accounts to start off with for display purposes. 
+            int accountNumber3 = 897562213;
+            AddGhostTransactions1(accountNumber3);
+
+            //Let's create some initial accounts to start off with for display purposes. 
+            int accountNumber4 = 1847562247;
+            AddGhostTransactions2(accountNumber4);
 
 
 
