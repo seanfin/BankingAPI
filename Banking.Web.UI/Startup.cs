@@ -43,13 +43,7 @@ namespace Banking.Web.UI
 
 
 
-        //// Set cache options.
-        //MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-        //    // Keep in cache for this time, reset time if accessed.
-        //    .SetSlidingExpiration(TimeSpan.FromSeconds(3));
-
-        //IMemoryCache memoryCache = new MemoryCache();
-
+       
 
 
 
@@ -60,11 +54,13 @@ namespace Banking.Web.UI
             MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseMemoryCache(cache) ; });
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase(databaseName: "BankingUI"));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager<BankSignInManager<IdentityUser>>()
                 .AddUserManager<BankUserManager<IdentityUser>>();
+            
 
 
             services.AddControllersWithViews();
@@ -94,12 +90,12 @@ namespace Banking.Web.UI
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                    {
-                        options.AccessDeniedPath = new PathString("/Identity/Account/Access");
-                        options.LoginPath = new PathString("/Identity/Account/Login");
-                    });
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+                    //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                    //{
+                    //    options.AccessDeniedPath = new PathString("/Identity/Account/Access");
+                    //    options.LoginPath = new PathString("/Identity/Account/Login");
+                    //});
 
 
 

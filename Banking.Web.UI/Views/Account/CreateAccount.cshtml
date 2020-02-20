@@ -1,19 +1,19 @@
 ﻿@model Banking.Core.Models.AuthenticateModel
 
 @{
-    ViewData["Title"] = "Login Page";
+    ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Welcome!</h1>
+<h1>View</h1>
 
-<h4>Please Login with Your Credentials Below </h4>
+<h4>AuthenticateModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { transaction = Model }))
-        {
+        <form asp-action="CreateAccount">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" />
@@ -21,18 +21,24 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" type="password" />
+                <input asp-for="Password" class="form-control" type="password"/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-        }
-        </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
 </div>
 
 <div>
-    Don't have an account? <a asp-action="CreateAccount">Register here!</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

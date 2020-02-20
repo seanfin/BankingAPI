@@ -25,5 +25,7 @@ namespace Banking.Core.Models
         [Required]
         public BankingTransactionType TransactionType {get; set;}
 
+        
+
     }
 }

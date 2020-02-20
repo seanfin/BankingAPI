@@ -29,12 +29,58 @@ namespace Banking.Web.UI.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
 
 
+        
+
+
         public AccountController(IOptions<ExternalAppSettings> appSettings, SignInManager<IdentityUser> signInManager)
         {
           
             _appSettings = AppSettingHelper.GetExternalApplicationConfiguration();
             this._signInManager = signInManager;
 
+        }
+
+
+
+        [HttpGet]
+        public IActionResult CreateAccount()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult CreateAccount (AuthenticateModel authenticateModel)
+        {
+
+            using (var client = new HttpClient())
+            {
+                //Getting access to our web api. 
+                client.BaseAddress = new Uri(this._appSettings.WebApiURLUser);
+
+                //Putting our username and password in a model because I want them going over in the body. 
+               
+
+                //Put them over in a post because I feel it works better than a get method. 
+                var responseTask = client.PostAsJsonAsync("createauthenicationaccount", authenticateModel);
+                responseTask.Wait();
+
+
+                //Let's look at the response. 
+                var authResult = responseTask.Result;
+
+                if (!authResult.IsSuccessStatusCode)
+                {
+                    
+                    throw new Exception("There was an issue while creating your account");
+                }
+                
+                   
+                
+
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -45,76 +91,70 @@ namespace Banking.Web.UI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Login(AuthenticateModel authenticateModel)
-        {
+        {                        
 
             using (var client = new HttpClient())
             {
+
+
+                
+                //Getting access to our web api. 
                 client.BaseAddress = new Uri(this._appSettings.WebApiURLUser);
 
-                //HTTP GET
+                //Putting our username and password in a model because I want them going over in the body. 
+             
+
+                //Put them over in a post because I feel it works better than a get method. 
                 var responseTask = client.PostAsJsonAsync("authenticate", authenticateModel);
                 responseTask.Wait();
 
-                var result = responseTask.Result;
-                if (!result.IsSuccessStatusCode)
-                {
+                //Let's look at the response. 
+                var authResult = responseTask.Result;
 
-                    ModelState.AddModelError("", "User not found");
-                    return View();
+                if (!authResult.IsSuccessStatusCode)
+                {
+                    throw new Exception("There was an issue when attempting to login");
+                }
+                else
+                {                    
+
+                    //Let's get the user login. 
+                    var userLogin = await authResult.Content.ReadAsAsync<AuthenticateModel>();
+
+                    //Lets populate the cookies and user principal.
+                    List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(ClaimTypes.Email, userLogin.Username));
+                    claims.Add(new Claim(ClaimTypes.Role, userLogin.Role));
+                    claims.Add(new Claim(ClaimTypes.Hash, userLogin.Token));
+
+                    //Need to create a Claims Identity. 
+                    var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    // Let's set the role. 
+                    userIdentity.AddClaim(new Claim(ClaimTypes.Role, userLogin.Role));
+
+                    // Let's set some authentication properties. 
+                    var authProperties = new AuthenticationProperties
+                    {
+                        ExpiresUtc = DateTime.Now.AddMinutes(this._appSettings.MinutesToPersistUser),
+                    };
+
+                    // Let's get the claims prinicipal. 
+                    var principal = new ClaimsPrincipal(userIdentity);
+
+                    //Let's sign in with the httpcontext because I am using cookies. 
+                    await HttpContext.SignInAsync(scheme: CookieAuthenticationDefaults.AuthenticationScheme,
+                        principal: principal, properties: authProperties);
+
+
+
                 }
 
-
-                var userLogin = await result.Content.ReadAsAsync<AuthenticateModel>();
-
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Email, userLogin.Username));
-                claims.Add(new Claim(ClaimTypes.Sid, userLogin.Id.ToString()));
-
-
-
-                //CookieAuthenticationDefaults.AuthenticationScheme
-                var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                //identity.AddClaim(new Claim(ClaimTypes.Surname, user.LastName));
-
-                //foreach (var role in user.Roles)
-                //{
-                userIdentity.AddClaim(new Claim(ClaimTypes.Role, userLogin.Role));
-
-                var authProperties = new AuthenticationProperties
-                {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20),
-                    IsPersistent = true,
-
-                };
-
-               
-                var principal = new ClaimsPrincipal(userIdentity);
-                //await HttpContext.SignOutAsync();
-                //var appUser = await this._signInManager.UserManager.GetUserAsync(principal);
-
-
-
-                //await HttpContext.SignInAsync(scheme: CookieAuthenticationDefaults.AuthenticationScheme,
-                //    principal: principal);
-
-               
-               
-
-
-
-                //await AuthenticationHttpContextExtensions.SignInAsync(HttpContext, principal);
-
-                //MarshalByRefObject
-
-                //    HttpContext.User.AddIdentity(userIdentity);
-
-
-
-
-                return RedirectToAction("Index", "Home");
-
             }
+
+            return RedirectToAction("Index", "Home");
+
+
 
         }
 

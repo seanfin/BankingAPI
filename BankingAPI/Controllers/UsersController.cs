@@ -61,7 +61,7 @@ namespace BankingAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("createauthenicationprofile")]
+        [HttpPost("createauthenicationaccount")]
         public IActionResult CreateAcount(AuthenticateModel authenticateModel)
         {
             var addModel = _userService.AddAuthenticationModel(authenticateModel);

@@ -49,44 +49,16 @@ namespace Banking.Web.UI.Models
             externalAppSettings = AppSettingHelper.GetExternalApplicationConfiguration();
         }
 
-        
+                       
 
-        public override Task<IdentityResult> CreateAsync(TUser user, string password)
+        public override Task<TUser> FindByEmailAsync(string email)
         {
-            
 
-            using (var client = new HttpClient())
-            {
-                //Getting access to our web api. 
-                client.BaseAddress = new Uri(this.externalAppSettings.WebApiURLUser);
-                
-                //Putting our username and password in a model because I want them going over in the body. 
-                AuthenticateModel authModel = new AuthenticateModel();
-                authModel = new AuthenticateModel();
-                authModel.Username = user.ToString();
-                authModel.Password = password;
+            return base.FindByNameAsync(email);
 
-                //Put them over in a post because I feel it works better than a get method. 
-                var responseTask = client.PostAsJsonAsync("createauthenicationprofile", authModel);
-                responseTask.Wait();
-
-
-                //Let's look at the response. 
-                var authResult = responseTask.Result;
-
-                if (!authResult.IsSuccessStatusCode)
-                {
-                    var identityError = new IdentityError[0];
-                    return Task.FromResult(IdentityResult.Failed(identityError));
-                }
-                else
-                {
-                    return Task.FromResult(IdentityResult.Success);
-                }
-
-            }
             
         }
+
 
         public override Task<TUser> FindByNameAsync(string userName)
         {
