@@ -89,7 +89,7 @@ namespace Banking.Core.Helper
                 {
                     AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(this._appSettings.CacheExpirationInMinutes)
                 };
-
+                ///Note: In a real world scenario we definately would want to encrypt the passwors more but I am keeping it simple here. 
                 //let's create a cache item. 
                 var itemToCache = new CacheItem(authenticationModel.Username, authenticationModel);
 
