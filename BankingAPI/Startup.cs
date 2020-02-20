@@ -70,7 +70,8 @@ namespace BankingAPI
             // Add our repository type
             services.AddSingleton<IBankTransactionService, BankTransactionService>();
             services.AddSingleton<IUserService, UserService>();
-           
+            services.AddSingleton<IProfileService, ProfileService>();
+
 
         }
 

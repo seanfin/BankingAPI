@@ -16,7 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Memory;
 
-
+using Banking.Core.Utils;
+using Banking.Core.Helper;
 using Banking.Web.UI.Data;
 using Banking.Web.UI.Models;
 
@@ -69,17 +70,27 @@ namespace Banking.Web.UI
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            ExternalAppSettings externalAppSettings = AppSettingHelper.GetExternalApplicationConfiguration();
+
+
             services.AddHttpClient("BankTransactions", client =>
             {
-                client.BaseAddress = new Uri("http://localhost:50362/BankTransaction/");
+                client.BaseAddress = new Uri(externalAppSettings.WebApiURLBankTransaction);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
             services.AddHttpClient("Users", client =>
             {
-                client.BaseAddress = new Uri("http://localhost:50362/Users/");
+                client.BaseAddress = new Uri(externalAppSettings.WebApiURLUser);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
+
+            services.AddHttpClient("Profiles", client =>
+            {
+                client.BaseAddress = new Uri(externalAppSettings.WebApiURLProfile);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

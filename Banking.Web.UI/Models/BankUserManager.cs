@@ -14,18 +14,26 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication;
-using System.Net;
+using System.Net.Http;
+
+using Banking.Core.Models;
+using Banking.Core.Utils;
+
 
 
 namespace Banking.Web.UI.Models
 {
     public class BankUserManager<TUser> :   UserManager<TUser> where TUser : class
     {
+        private readonly ExternalAppSettings externalAppSettings;
+
         IHttpContextAccessor _httpContext; 
 
         public BankUserManager(IHttpContextAccessor httpContext, IUserStore<TUser> userStore, IOptions<IdentityOptions> optionsAccessor,
@@ -38,30 +46,54 @@ namespace Banking.Web.UI.Models
         {
             this._httpContext = httpContext;
 
-
+            externalAppSettings = AppSettingHelper.GetExternalApplicationConfiguration();
         }
 
+        
 
         public override Task<IdentityResult> CreateAsync(TUser user, string password)
         {
-            return base.CreateAsync(user, password);
+            
+
+            using (var client = new HttpClient())
+            {
+                //Getting access to our web api. 
+                client.BaseAddress = new Uri(this.externalAppSettings.WebApiURLUser);
+                
+                //Putting our username and password in a model because I want them going over in the body. 
+                AuthenticateModel authModel = new AuthenticateModel();
+                authModel = new AuthenticateModel();
+                authModel.Username = user.ToString();
+                authModel.Password = password;
+
+                //Put them over in a post because I feel it works better than a get method. 
+                var responseTask = client.PostAsJsonAsync("createauthenicationprofile", authModel);
+                responseTask.Wait();
+
+
+                //Let's look at the response. 
+                var authResult = responseTask.Result;
+
+                if (!authResult.IsSuccessStatusCode)
+                {
+                    var identityError = new IdentityError[0];
+                    return Task.FromResult(IdentityResult.Failed(identityError));
+                }
+                else
+                {
+                    return Task.FromResult(IdentityResult.Success);
+                }
+
+            }
+            
         }
 
         public override Task<TUser> FindByNameAsync(string userName)
         {
 
-            //Let's look it up via Rest call 
-
-
-
+            ///This tries to look up the user via a database we don't have that so let's null it out for this.
             return Task.FromResult((TUser)null);
 
-
-
-
-
-
-            //return base.FindByNameAsync(userName);
         }
 
     }

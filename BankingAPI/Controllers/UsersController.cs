@@ -42,14 +42,7 @@ namespace BankingAPI.Controllers
             return Ok(user);
         }
 
-        [AllowAnonymous]
-        [HttpPost("getprofileinfobyusername")]
-        public IActionResult Authenticate([FromBody] string userName)
-        {
-            var profileInfo = _userService.GetProfileInformationByEmail(userName);
-
-            return Ok(profileInfo);
-        }
+       
 
 
         [Authorize(Roles = Role.Admin)]
@@ -66,6 +59,21 @@ namespace BankingAPI.Controllers
             
 
         }
+
+        [AllowAnonymous]
+        [HttpPost("createauthenicationprofile")]
+        public IActionResult CreateAcount(AuthenticateModel authenticateModel)
+        {
+            var addModel = _userService.AddAuthenticationModel(authenticateModel);
+
+            addModel = SecurityHelper.RemovePassword(addModel);
+
+            return Ok(addModel);
+
+
+
+        }
+
 
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)

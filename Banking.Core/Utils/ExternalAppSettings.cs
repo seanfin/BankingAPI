@@ -16,6 +16,16 @@ namespace Banking.Core.Utils
         /// This is the URL for the web api for the User Service
         /// </summary>
         public string WebApiURLUser { get; set; }
-               
+
+        /// <summary>
+        /// This is the URL for the web api for the User Service
+        /// </summary>
+        public string WebApiURLProfile { get; set; }
+
+        /// <summary>
+        /// This is how long we will persist the user. 
+        /// </summary>
+        public int MinutesToPersistUser { get; set; }
+
     }
 }

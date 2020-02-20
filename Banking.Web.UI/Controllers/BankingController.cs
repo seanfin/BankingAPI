@@ -209,7 +209,7 @@ namespace Banking.Web.UI.Controllers
 
             // Get an instance of HttpClient from the factpry that we registered
             // in Startup.cs
-            using (var client = this._httpClientFactory.CreateClient("Users"))
+            using (var client = this._httpClientFactory.CreateClient("Profiles"))
             {
 
                 //Get the security Token. 

@@ -80,19 +80,19 @@ namespace Banking.Core.Test
 
             //Create the options and the User Service
             IOptions<AppSettings> settings = Options.Create(this._appSettings);
-            UserService userService = new UserService(settings);
+            ProfileService profileInfo = new ProfileService(settings);
 
             //Let's add the first user.
-            var user1AfterAdded = userService.AddProfileInformation(userLogin1);
+            var user1AfterAdded = profileInfo.AddProfileInformation(userLogin1);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetByIDProfileInformation(user1AfterAdded.Id));
+            Assert.IsNotNull(profileInfo.GetByIDProfileInformation(user1AfterAdded.Id));
 
             //Let's add the second user.
-            var user2AfterAdded = userService.AddProfileInformation(userLogin2);
+            var user2AfterAdded = profileInfo.AddProfileInformation(userLogin2);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetByIDProfileInformation(user2AfterAdded.Id));
+            Assert.IsNotNull(profileInfo.GetByIDProfileInformation(user2AfterAdded.Id));
             
         }
 
@@ -117,13 +117,13 @@ namespace Banking.Core.Test
 
             //Create the options and the User Service
             IOptions<AppSettings> settings = Options.Create(this._appSettings);
-            UserService userService = new UserService(settings);
+            ProfileService profilesService = new ProfileService(settings);
 
             //Let's add the first user.
-            var user1AfterAdded = userService.AddProfileInformation(userLogin1);
+            var user1AfterAdded = profilesService.AddProfileInformation(userLogin1);
 
             //Check to see if the user has been added. 
-            Assert.IsNotNull(userService.GetByIDProfileInformation(user1AfterAdded.Id));
+            Assert.IsNotNull(profilesService.GetByIDProfileInformation(user1AfterAdded.Id));
             
         }
 

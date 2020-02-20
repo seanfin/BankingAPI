@@ -10,15 +10,9 @@ namespace Banking.Core.Interfaces
     {
         AuthenticateModel Authenticate(AuthenticateModel authenticateModel);
         AuthenticateModel GetByIdAuthenticationModel(Guid id);
-
-        ProfileInformation AddProfileInformation(ProfileInformation profileInformation);
         AuthenticateModel AddAuthenticationModel(AuthenticateModel authenticationModel);
-
         IEnumerable<AuthenticateModel> GetAllAuthenticationModels();
-        IEnumerable<ProfileInformation> GetAllProfileInformation();
 
-        ProfileInformation GetByIDProfileInformation(Guid id);
-
-        ProfileInformation GetProfileInformationByEmail(string userName);
     }
+        
 }
