@@ -238,6 +238,7 @@ namespace Banking.Core.Helper
                 while (cacheEnumerator.MoveNext())
                 {
                     AuthenticateModel existingLogin = (AuthenticateModel)cacheEnumerator.Value;
+                    var cloneExistingLogin = SecurityHelper.DeepClone(existingLogin);
                     logins.Add(existingLogin);
                 }
 
@@ -271,7 +272,8 @@ namespace Banking.Core.Helper
                 while (cacheEnumerator.MoveNext())
                 {
                     ProfileInformation existingLogin = (ProfileInformation)cacheEnumerator.Value;
-                    logins.Add(existingLogin);
+                    var cloneExistingLogin = SecurityHelper.DeepClone(existingLogin);
+                    logins.Add(cloneExistingLogin);
                 }
 
             }

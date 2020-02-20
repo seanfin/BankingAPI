@@ -37,6 +37,7 @@ namespace BankingAPI.Controllers
 
             //user = SecurityHelper.RemovePassword(user);
 
+            
 
             return Ok(user);
         }

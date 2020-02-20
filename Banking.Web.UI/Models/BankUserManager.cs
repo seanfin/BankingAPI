@@ -42,7 +42,10 @@ namespace Banking.Web.UI.Models
         }
 
 
-       
+        public override Task<IdentityResult> CreateAsync(TUser user, string password)
+        {
+            return base.CreateAsync(user, password);
+        }
 
         public override Task<TUser> FindByNameAsync(string userName)
         {

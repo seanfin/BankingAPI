@@ -11,19 +11,18 @@
     @if (User.IsInRole("Telller") || User.IsInRole("Admin"))
     {
         <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="CreateTransaction" >Post New Banking Transactions</a>
             </p>
     }
 
         </p>
 <h3>Your current balance is = @ViewBag.AccountBalance</h3>
+<h4>Your Account Ending in = @ViewBag.MaskedAccountNumber</h4>
 <table class="table">
     <thead>
         <tr>
             
-            <th>
-                @Html.DisplayNameFor(model => model.AccountNumber)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.PostedDate)
             </th>
@@ -43,9 +42,7 @@
 @foreach (var item in Model) {
         <tr>
            
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountNumber)
-            </td>
+          
             <td>
                 @Html.DisplayFor(modelItem => item.PostedDate)
             </td>
@@ -58,11 +55,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.TransactionType)
             </td>
-            <td>
-              
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })
-
-            </td>
+           
         </tr>
 }
     </tbody>

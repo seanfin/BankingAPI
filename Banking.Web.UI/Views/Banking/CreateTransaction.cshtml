@@ -1,4 +1,6 @@
 ﻿@model Banking.Core.Models.BankTransaction
+@using Banking.Core.Enums
+
 
 @{
     ViewData["Title"] = "View";
@@ -14,19 +16,16 @@
         <form asp-action="CreateTransaction">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="BankTransactionID" class="control-label"></label>
-                <input asp-for="BankTransactionID" class="form-control" />
-                <span asp-validation-for="BankTransactionID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="AccountNumber" class="control-label"></label>
-                <input asp-for="AccountNumber" class="form-control" />
-                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                @Html.DisplayFor(model => model.AccountNumber)
+                @Html.HiddenFor(model => model.AccountNumber)
+
             </div>
             <div class="form-group">
                 <label asp-for="PostedDate" class="control-label"></label>
-                <input asp-for="PostedDate" class="form-control" />
-                <span asp-validation-for="PostedDate" class="text-danger"></span>
+                @Html.DisplayFor(model => model.PostedDate)
+                @Html.HiddenFor(model => model.PostedDate)
+
             </div>
             <div class="form-group">
                 <label asp-for="PostedAmount" class="control-label"></label>
@@ -40,7 +39,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="TransactionType" class="control-label"></label>
-                <input asp-for="TransactionType" class="form-control" />
+                @Html.DropDownListFor(m => m.TransactionType, Html.GetEnumSelectList(Model.TransactionType.GetType()))
+
+
                 <span asp-validation-for="TransactionType" class="text-danger"></span>
             </div>
             <div class="form-group">

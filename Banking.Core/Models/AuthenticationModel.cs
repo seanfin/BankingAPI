@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Banking.Core.Models
 {
@@ -20,6 +22,12 @@ namespace Banking.Core.Models
             public string Token { get; set; }
 
             public string Role { get; set; }
+
+
+       
+
     }
+
+   
 
 }

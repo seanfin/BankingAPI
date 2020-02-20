@@ -30,6 +30,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using System.Net.Http.Headers;
+
+
+
 
 
 
@@ -118,6 +122,24 @@ namespace Banking.Web.UI.Models
                     //{
                     userIdentity.AddClaim(new Claim(ClaimTypes.Role, userLogin.Role));
 
+                    HttpClient bankClient = new HttpClient();
+                    bankClient.BaseAddress = new Uri(this.externalAppSettings.WebApiURLBankTransaction);
+
+
+
+                    //client.DefaultRequestHeaders.Add("IDENTITY_KEY", securityToken);
+
+                    AuthenticationHeaderValue authHeaders = new AuthenticationHeaderValue("Bearer", userLogin.Token);
+                    bankClient.DefaultRequestHeaders.Authorization = authHeaders;
+
+
+                    var bankTransResults = await bankClient.GetAsync("Hello");
+
+
+
+
+
+
                     var authProperties = new AuthenticationProperties
                     {
                         ExpiresUtc = DateTime.Now.AddMinutes(3),
@@ -197,27 +219,26 @@ namespace Banking.Web.UI.Models
 
             return result;
         }
-        protected override Task<SignInResult> PreSignInCheck(TUser user)
-        {
-            return base.PreSignInCheck(user);
-        }
+     
 
-      
-
+        
+        /// <summary>
+        /// Sign Out  of the system. 
+        /// </summary>
+        /// <returns>Nothing.</returns>
         public override async Task SignOutAsync()
         {
+            //Need to sign out with my cookies because I am using cookies. 
+            await this._contextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            //Perform what the base does. 
             await base.SignOutAsync();
 
-            //var user = await _userManager.FindByIdAsync(_contextAccessor.HttpContext.User.GetUserId()) as IdentityUser;
+        }
 
-            //if (user != null)
-            //{
-            //    var ip = _contextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
-
-            //    var auditRecord = UserAudit.CreateAuditEvent(user.Id, UserAuditEventType.LogOut, ip);
-            //    _db.UserAuditEvents.Add(auditRecord);
-            //    await _db.SaveChangesAsync();
-            //}
+        public override Task<ClaimsPrincipal> CreateUserPrincipalAsync(TUser user)
+        {
+            return base.CreateUserPrincipalAsync(user);
         }
     }
 }
