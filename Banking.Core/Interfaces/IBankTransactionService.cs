@@ -8,6 +8,7 @@ namespace Banking.Core.Interfaces
 {
     public interface IBankTransactionService
     {
+        bool CheckforAccountNumber(int accountNumber);
         BankTransaction AddTransaction(BankTransaction bankTransaction);
         public List<BankTransaction> GetAllBankingTransactions(int accountNumber);
         public decimal GetBalance(int accountNumber);

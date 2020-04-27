@@ -210,6 +210,47 @@ namespace Banking.Core.Test
 
         }
 
+        [TestMethod]
+        public void BankTransaction_BadAccount()
+        {
+            //The account number we will be using. 
+            int accountNumber = 123456;
+
+            //The transaction 1 we will be using. 
+            BankTransaction transaction1 = new BankTransaction();
+            transaction1.AccountNumber = accountNumber;
+            transaction1.PostedDate = DateTime.Now;
+            transaction1.PostedAmount = 3000;
+            transaction1.Description = "Initial Deposit";
+            transaction1.TransactionType = BankingTransactionType.deposit;
+
+            //The transaction we will be using. 
+            BankTransaction transaction2 = new BankTransaction();
+            transaction2.AccountNumber = accountNumber;
+            transaction2.PostedDate = DateTime.Now;
+            transaction2.PostedAmount = 15.95m;
+            transaction2.Description = "Trader Joes";
+            transaction2.TransactionType = BankingTransactionType.withdrawl;
+
+            //The transaction 3 we will be using. 
+            BankTransaction transaction3 = new BankTransaction();
+            transaction3.AccountNumber = accountNumber;
+            transaction3.PostedDate = DateTime.Now;
+            transaction3.PostedAmount = 30.99m;
+            transaction3.Description = "AMC Movie Theater";
+            transaction3.TransactionType = BankingTransactionType.withdrawl;
+
+
+            //Let's get the bank helper.
+            IOptions<AppSettings> settings = Options.Create(this._appSettings);
+            BankTransactionService bankHelper = new BankTransactionService(settings);
+
+            //Let's add the transaction helper.
+            var Transaction1Posted = bankHelper.AddTransaction(transaction1);
+
+            //Do a check of all transactions and look for the ID that you added. - Transaction 1
+            var transactionsAfterTransaction1Added = bankHelper.GetAllBankingTransactions(7777777);
+        }
 
     }
 }

@@ -8,6 +8,7 @@ using Banking.Core.Models;
 using Banking.Core.Enums;
 using Banking.Core.Interfaces;
 using Banking.Core.Utils;
+using System.Linq;
 
 namespace Banking.Core.Helper
 {
@@ -154,6 +155,37 @@ namespace Banking.Core.Helper
             return transactions;
 
         }
+
+        /// <summary>
+        /// Get all BankingTransactions
+        /// </summary>
+        /// <param name="accountNumber">The bank number associated with the banking transactions that are being returned. </param>
+        public bool CheckforAccountNumber(int accountNumber)
+        {
+            //Check to see if the account number is populated if not we need to throw an exception. 
+            if (accountNumber == -1)
+            {
+                throw new Exception("In order to get all Transactions the method needs to have an account number.");
+            }
+
+            var accountNumberExists = false;
+
+                lock (this)
+                {
+
+
+                    //Get a reference to the default MemoryCache instance.
+                    var cacheContainer = MemoryCache.Default;
+
+                //Let's return the transactions with the account. 
+                accountNumberExists = cacheContainer.Contains(accountNumber.ToString());
+
+                }
+
+            return accountNumberExists;
+        }
+
+
 
         /// <summary>
         /// Retrieves the balance from the transactions. 

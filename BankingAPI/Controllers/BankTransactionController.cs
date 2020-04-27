@@ -38,13 +38,22 @@ namespace BankingAPI.Controllers
             //Get the transactions.
             try
             {
-                var transactions = this._bankTransactionService.GetAllBankingTransactions(accountNumber).ToArray();
+                //Check to see if the account number exists. If not return 
+                bool accountNumberExists = this._bankTransactionService.CheckforAccountNumber(accountNumber);
+               
+                if (!accountNumberExists)
+                {
+                    return NotFound();
+                }
 
+                var transactions = this._bankTransactionService.GetAllBankingTransactions(accountNumber).ToArray();
+                
                 return Ok(transactions);
 
             }
             catch (Exception ex)
             {
+                //TODO: Need to look at the error and create more specific status codes for this. 
                 //If there was an error send back the bad request.
                 return BadRequest(new { message = ex.Message.ToString() });
             }
@@ -61,6 +70,14 @@ namespace BankingAPI.Controllers
             //Get the transactions.
             try
             {
+                //Check to see if the account number exists. If not return 
+                bool accountNumberExists = this._bankTransactionService.CheckforAccountNumber(accountNumber);
+                if (!accountNumberExists)
+                {
+                    return NotFound();
+                }
+
+
                 var balance = this._bankTransactionService.GetBalance(accountNumber);
 
                 return Ok(balance);
@@ -68,6 +85,7 @@ namespace BankingAPI.Controllers
             }
             catch (Exception ex)
             {
+                //TODO: Need to look at the error and create more specific status codes for this.
                 //If there was an error send back the bad request.
                 return BadRequest(new { message = ex.Message.ToString() });
             }
@@ -101,13 +119,15 @@ namespace BankingAPI.Controllers
                 }
                 else
                 {
+                    //TODO: This needs to be changed to created with the path back to where it was created. Created(string, object)
                     //return that all is ok
-                    return Ok(transaction);
+                    return Ok();
                 }
                                 
             }
             catch(Exception ex)
             {
+                //TODO: Need to look at the error and create more specific status codes for this.
                 //If there was an error send back the bad request.
                 return BadRequest(new { message = ex.Message.ToString() });
 
